@@ -1,4 +1,4 @@
-package com.ljx.util;
+package com.ljx.gmall.util;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
