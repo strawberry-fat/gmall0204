@@ -13,3 +13,5 @@ spring:
 mapper:
   identity: MYSQL
   mappers: com.ljx.gmall.manage.BaseMapper.TkBaseMapper
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
