@@ -1,4 +1,4 @@
-package com.ljx.gmall.manage;
+package com.ljx.gmall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
