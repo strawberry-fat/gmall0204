@@ -13,11 +13,10 @@ import com.ljx.gmall.manage.mapper.PmsSkuSaleAttrValueMapper;
 import com.ljx.gmall.service.SkuService;
 import com.ljx.gmall.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.jboss.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
-
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SkuServiceImpl implements SkuService {
@@ -95,14 +94,38 @@ public class SkuServiceImpl implements SkuService {
             skuInfo  = JSON.parseObject(skuJson, PmsSkuInfo.class);
         }else {
             //如果缓存中没有查询数据库
-            skuInfo = getSkuByIdFromDb(skuId);
-            //mysql查询结果存入Redis
-            if(skuInfo != null){
-                jedis.set("sku:"+skuId+":info",JSON.toJSONString(skuInfo));
+
+            //设置分布式锁
+            String token = UUID.randomUUID().toString();
+            String OK = jedis.set("sku:" + skuId + ":lock", token, "nx", "px", 10);
+            if(StringUtils.isNoneBlank(OK)&&"OK".equals(OK)){
+                //成功获取到锁之后，10s内可以访问数据库。
+                skuInfo = getSkuByIdFromDb(skuId);
+
+                if(skuInfo != null){
+                    //mysql查询结果存入Redis
+                    jedis.set("sku:"+skuId+":info",JSON.toJSONString(skuInfo));
+                }else {
+                    //如果数据库中不存在，为了防止缓存穿透，将null或者空字符串设置给redis
+                    jedis.setex("sku:"+skuId+":info",60*2,JSON.toJSONString(""));
+                }
+
+                //释放分布式锁,根据key值判断只能删除自己的锁。
+                String keyToken = jedis.get("sku:" + skuId + ":lock");
+                if(StringUtils.isNotBlank(keyToken) && keyToken.equals(token)){
+                    //jedis.eval(lua);
+                    jedis.del("sku:" + skuId + ":lock");
+                }
             }else {
-                //如果数据库中不存在，为了防止缓存穿透，将null或者空字符串设置给redis
-                jedis.setex("sku:"+skuId+":info",60*2,JSON.toJSONString(""));
+                //设置失败，没有获取分布式锁。自旋。
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return getSkuById(skuId);
             }
+
         }
         jedis.close();
 //        skuInfo = getSkuByIdFromDb(skuId);
