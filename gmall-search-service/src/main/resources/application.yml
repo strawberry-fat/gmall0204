@@ -1,0 +1,18 @@
+spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/gmall?serverTimezone=UTC
+#    username: root
+#    password: '123456'
+#  dubbo:
+#    registry:
+#      address: 134.175.25.48:2181
+#      protocol: zookeeper
+  elasticsearch:
+    jest:
+      uris: http://119.3.164.238:9200
+
+#mapper:
+#  identity: MYSQL
+#mybatis:
+#  mapper-locations: classpath:mapper/*Mapper.xml
