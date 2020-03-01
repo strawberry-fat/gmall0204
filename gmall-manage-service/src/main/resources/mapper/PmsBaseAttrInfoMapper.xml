@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ljx.gmall.manage.mapper.PmsBaseAttrInfoMapper">
+
+    <select id="selectAttrValueListByValueId" resultMap="BaseAttrMap">
+SELECT
+	ba.*,
+	ba.id AS ba_id,
+	bv.*,
+	bv.id AS bv_id
+FROM
+	pms_base_attr_info ba,
+	pms_base_attr_value bv
+WHERE
+	ba.id = bv.attr_id
+	AND bv.id IN (${valueIdsStr})
+    </select>
+
+
+    <resultMap id="BaseAttrMap" type="com.ljx.gmall.bean.PmsBaseAttrInfo" autoMapping="true">
+        <result column="ba_id" property="id"></result>
+        <collection property="attrValueList" ofType="com.ljx.gmall.bean.PmsBaseAttrValue" autoMapping="true">
+            <result column="bv_id" property="id"></result>
+        </collection>
+    </resultMap>
+</mapper>
