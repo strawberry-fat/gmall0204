@@ -11,6 +11,8 @@ public class PmsSearchParam implements Serializable{
 
     private List<PmsSkuAttrValue> skuAttrValueList;
 
+    private String[] valueId;
+
     public String getCatalog3Id() {
         return catalog3Id;
     }
@@ -33,5 +35,13 @@ public class PmsSearchParam implements Serializable{
 
     public void setSkuAttrValueList(List<PmsSkuAttrValue> skuAttrValueList) {
         this.skuAttrValueList = skuAttrValueList;
+    }
+
+    public String[] getValueId() {
+        return valueId;
+    }
+
+    public void setValueId(String[] valueId) {
+        this.valueId = valueId;
     }
 }
