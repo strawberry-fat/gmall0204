@@ -14,6 +14,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AttrServiceImpl implements AttrService {
@@ -90,5 +91,12 @@ public class AttrServiceImpl implements AttrService {
     @Override
     public List<PmsBaseSaleAttr> baseSaleAttrList() {
         return baseSaleAttrMapper.selectAll();
+    }
+    //根据ValueId的Set集合查询属性集合
+    @Override
+    public List<PmsBaseAttrInfo> getAttrValueListByValueId(Set<String> valueIdSet) {
+        String valueIdsStr = StringUtils.join(valueIdSet, ",");
+        List<PmsBaseAttrInfo> attrInfoList = attrInfoMapper.selectAttrValueListByValueId(valueIdsStr);
+        return attrInfoList;
     }
 }
