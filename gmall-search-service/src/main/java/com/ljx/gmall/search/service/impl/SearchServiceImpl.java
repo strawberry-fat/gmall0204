@@ -46,10 +46,12 @@ public class SearchServiceImpl implements SearchService {
         List<SearchResult.Hit<PmsSearchSkuInfo, Void>> hits = execute.getHits(PmsSearchSkuInfo.class);
         for (SearchResult.Hit<PmsSearchSkuInfo, Void> hit : hits) {
             PmsSearchSkuInfo source = hit.source;
-            //加高亮
-//            Map<String, List<String>> highlight = hit.highlight;
-//            String skuName = highlight.get("skuName").get(0);
-//            source.setSkuName(skuName);
+            //加高亮,只有搜索关键字的时候才会高亮
+            Map<String, List<String>> highlight = hit.highlight;
+            if(highlight != null){
+                String skuName = highlight.get("skuName").get(0);
+                source.setSkuName(skuName);
+            }
 
             searchSkuInfoList.add(source);
         }
@@ -57,7 +59,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private String getDslStr(PmsSearchParam searchParam) {
-        List<PmsSkuAttrValue> skuAttrValueList = searchParam.getSkuAttrValueList();
+        String[] skuAttrValueList = searchParam.getValueId();
         String keyword = searchParam.getKeyword();
         String catalog3Id = searchParam.getCatalog3Id();
         //jest的dsl工具
@@ -73,8 +75,8 @@ public class SearchServiceImpl implements SearchService {
 
 
         if(skuAttrValueList != null){
-            for (PmsSkuAttrValue skuAttrValue : skuAttrValueList) {
-                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList",skuAttrValue.getValueId());
+            for (String skuAttrValue : skuAttrValueList) {
+                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId",skuAttrValue);
                 boolQueryBuilder.filter(termQueryBuilder);
             }
         }
