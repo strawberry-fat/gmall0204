@@ -1,9 +1,13 @@
 package com.ljx.gmall.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-
+@Getter
+@Setter
 public class PmsSkuAttrValue implements Serializable {
 
     @Id
@@ -19,35 +23,4 @@ public class PmsSkuAttrValue implements Serializable {
     @Column
     String skuId;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAttrId() {
-        return attrId;
-    }
-
-    public void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
-
-    public String getValueId() {
-        return valueId;
-    }
-
-    public void setValueId(String valueId) {
-        this.valueId = valueId;
-    }
-
-    public String getSkuId() {
-        return skuId;
-    }
-
-    public void setSkuId(String skuId) {
-        this.skuId = skuId;
-    }
 }

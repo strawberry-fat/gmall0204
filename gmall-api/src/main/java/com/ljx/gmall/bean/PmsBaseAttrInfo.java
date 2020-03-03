@@ -1,6 +1,9 @@
 package com.ljx.gmall.bean;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.List;
  * @param
  * @return
  */
+@Getter
+@Setter
 public class PmsBaseAttrInfo implements Serializable {
     //主键返回策略
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,43 +29,5 @@ public class PmsBaseAttrInfo implements Serializable {
     @Transient
     List<PmsBaseAttrValue> attrValueList;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAttrName() {
-        return attrName;
-    }
-
-    public void setAttrName(String attrName) {
-        this.attrName = attrName;
-    }
-
-    public String getCatalog3Id() {
-        return catalog3Id;
-    }
-
-    public void setCatalog3Id(String catalog3Id) {
-        this.catalog3Id = catalog3Id;
-    }
-
-    public String getIsEnabled() {
-        return isEnabled;
-    }
-
-    public void setIsEnabled(String isEnabled) {
-        this.isEnabled = isEnabled;
-    }
-
-    public List<PmsBaseAttrValue> getAttrValueList() {
-        return attrValueList;
-    }
-
-    public void setAttrValueList(List<PmsBaseAttrValue> attrValueList) {
-        this.attrValueList = attrValueList;
-    }
 }
